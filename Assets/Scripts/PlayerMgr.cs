@@ -64,13 +64,15 @@ namespace Player
                 case KeyCode.Space:
                     if (standState == StandState.OnGround || standState == StandState.OnTree)
                     {
-                        Jump();
+                        rb.bodyType = RigidbodyType2D.Dynamic;
                         playerAnimState.TryChangeState(PlayerState.Jump);
+                        Jump();
                     }
                     break;
                 case KeyCode.W:
-                    if (canCrawlTree)
+                    if (canCrawlTree && standState != StandState.OnTree)
                     {
+                        rb.bodyType = RigidbodyType2D.Kinematic;
                         standState = StandState.OnTree;
                         playerAnimState.TryChangeState(PlayerState.Crawl);
                     }
@@ -86,21 +88,21 @@ namespace Player
 //        private void GetHorizontal(float horizontal)
 //        {
 //            _playerMoveX = horizontal;
-//            if(horizontal > 0)
-//                transform.localScale = Vector3.one;
-//            else if(horizontal < 0)
-//                transform.localScale = new Vector3(-1, 1, 1);
+
 //        }
 
         private void GetMoveVector2(Vector2 moveDir)
         {
-            
+            _moveDir = moveDir;
+            if(_moveDir.x > 0)
+                transform.localScale = Vector3.one;
+            else if(_moveDir.x < 0)
+                transform.localScale = new Vector3(-1, 1, 1);
         }
         
         void Update()
         {
-            if(playerAnimState.CurState == PlayerState.Crawl)
-                playerAnimState.SetAnimSpeed(_moveDir.x * _moveDir.y);
+            Debug.Log(playerAnimState.CurState);
             Run();
             CheckGround();
             CheckState();
@@ -111,7 +113,10 @@ namespace Player
             if(playerAnimState.CurState != PlayerState.Crawl)
                 rb.velocity = new Vector2(_moveDir.x * speed, rb.velocity.y);
             else
+            {
                 rb.velocity = _moveDir * speed;
+                playerAnimState.SetAnimSpeed(_moveDir.x * _moveDir.y);
+            }
             
         }
         
@@ -171,9 +176,7 @@ namespace Player
                 
                 if(standState != StandState.OnTree)
                 {
-                    canCrawlTree = true;
-//                    playerAnimState.TryChangeState(PlayerState.Idle);
-                    //AudioManager.PlayerAudio("fall" + Random.Range(0,2).ToString(), Random.Range(0.3f, 0.5f));
+                    canCrawlTree = true;                  
                 }
             }
             else
