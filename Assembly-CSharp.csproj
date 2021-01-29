@@ -78,6 +78,7 @@
      <Compile Include="Assets\Scripts\ProjectBase\UIMgr\LoginPenal.cs" />
      <Compile Include="Assets\Scripts\ProjectBase\UIMgr\UIMgr.cs" />
      <Compile Include="Assets\Scripts\SomeEnum.cs" />
+     <Compile Include="Assets\Scripts\UI\UiMgr.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/jihao/UnityProject/2021 ggj/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

@@ -46,6 +46,9 @@
             </e>
           </e>
           <e p="SomeEnum.cs" t="Include" />
+          <e p="UI" t="Include">
+            <e p="UIMgr.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

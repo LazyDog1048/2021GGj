@@ -20,6 +20,13 @@ namespace Player
         private Vector2 _moveDir;
         private bool canCrawlTree;
         private bool touchGround;
+
+        //人物属性
+        [Header("人物属性")]
+        public int maxPower;                //最大体力
+        public int maxPineConeCount;        //最大携带松果数量
+        private int curPineConeCount;           //携带松果数量
+        private int curPower;                   //体力
         
         public Vector2 MoveDir
         {
@@ -49,8 +56,8 @@ namespace Player
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyPress", GetKeyPress);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyDown", GetKeyDown);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyUp", GetKeyUp);
-//            EventCenter.GetInstance().AddEventListener<float>("MoveHorizontal", GetHorizontal);
             EventCenter.GetInstance().AddEventListener<Vector2>("MoveVector2", GetMoveVector2);
+            UiMgr.Instance.InitPowerBar(maxPower);
             
         }
 
@@ -99,12 +106,7 @@ namespace Player
         {
             
         }
-        
-//        private void GetHorizontal(float horizontal)
-//        {
-//            _playerMoveX = horizontal;
 
-//        }
 
         private void GetMoveVector2(Vector2 moveDir)
         {
@@ -205,6 +207,19 @@ namespace Player
             if(platformCollider == null && standState != StandState.OnTree)
                 standState = StandState.Float;
             
+        }
+
+        public void EatPinecone()
+        {
+            if (curPineConeCount > 1)
+            {
+                curPineConeCount--;
+                curPower += 3;
+                if (curPower > maxPower)
+                    curPower = maxPower;
+                
+                EventCenter.GetInstance().EventTrigger("PowerChange", curPower);
+            }
         }
 
         private void DelayJump()
