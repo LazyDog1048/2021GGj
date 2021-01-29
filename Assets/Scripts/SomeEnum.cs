@@ -7,6 +7,7 @@
         Fall,
         Jump,
         Crawl,
+        CrawlIdle,
         Attack
     }
     

@@ -158,12 +158,12 @@ namespace Player
         }
         
         
-    //    private void OnDrawGizmos()
-    //    {
-    //        Vector2 checkTreeSize = box.bounds.size;
-    //        Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
-    //        Gizmos.DrawWireCube(checkTreePoint, checkTreeSize);
-    //    }
+//    private void OnDrawGizmos()
+//    {
+//        Vector2 checkTreeSize = new Vector2(box.bounds.size.x/2, box.bounds.size.y);            //0.3
+//        Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
+//        Gizmos.DrawWireCube(checkTreePoint, checkTreeSize);
+//    }
            
         private void CheckGround()
         {
@@ -171,7 +171,7 @@ namespace Player
             Vector2 checkPoint = new Vector2(transform.position.x, transform.position.y - (box.bounds.size.y + checkSize.y) / 2 - 0.125f );//-0.1f
             Collider2D platformCollider = Physics2D.OverlapBox(checkPoint, checkSize, 0, LayerMask.GetMask("Platform"));
 
-            Vector2 checkTreeSize = box.bounds.size;
+            Vector2 checkTreeSize = new Vector2(box.bounds.size.x/2, box.bounds.size.y);            //0.3
             Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
             Collider2D treeCollider = Physics2D.OverlapBox(checkTreeSize, checkTreePoint, 0, LayerMask.GetMask("Tree"));
                 
@@ -202,7 +202,7 @@ namespace Player
             }
             
             
-            if(platformCollider == null && treeCollider == null)
+            if(platformCollider == null && standState != StandState.OnTree)
                 standState = StandState.Float;
             
         }
@@ -211,7 +211,7 @@ namespace Player
         {
             standState = StandState.Float;
         }
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerStay2D(Collider2D other)
         {
             if (other.CompareTag("Tree") && standState != StandState.OnTree)
             {
