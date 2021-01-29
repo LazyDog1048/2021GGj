@@ -4,21 +4,16 @@ using UnityEngine;
 
 namespace Player
 {
-    public enum PlayerState
-    {
-        Idle,
-        Run,
-        Attack
-    }
     public class PlayerAnimStateMgr : MonoBehaviour
     {
         private PlayerState _playerState;
         private PlayerState _lastState;
         private Animator _anim;
-
+        private PlayerMgr playerMgr;
         void Start()
         {
             _anim = GetComponent<Animator>();
+            playerMgr = GetComponent<PlayerMgr>();
         }
             
         public virtual void TryChangeState(PlayerState playerState)
@@ -29,12 +24,18 @@ namespace Player
             switch (playerState)
             {
                 case PlayerState.Idle:
-                    _playerState = playerState;
+                        _playerState = playerState;
                     break;
                 case PlayerState.Run:
-                    _playerState = playerState;
+                        _playerState = playerState;
                     break;
-                case PlayerState.Attack:
+                case PlayerState.Jump:
+                        _playerState = playerState;
+                    break;
+                case PlayerState.Fall:
+                        _playerState = playerState;
+                    break;
+                case PlayerState.Crawl:
                     _playerState = playerState;
                     break;
             }
@@ -46,20 +47,9 @@ namespace Player
         {
             if(playerState == _playerState)
                 return;
-                
-            switch (playerState)
-            {
-                case PlayerState.Idle:
-                    _playerState = playerState;
-                    break;
-                case PlayerState.Run:
-                    _playerState = playerState;
-                    break;
-                case PlayerState.Attack:
-                    _playerState = playerState;
-                    break;
-            }
-                
+            
+            _playerState = playerState;
+            
             OnPlayerStateChange(_playerState);
         }
             
@@ -68,13 +58,22 @@ namespace Player
             if(playerState == _lastState)
                 return;
             _lastState = playerState;
-                
+            
             StateResume();
-                
+            
             switch (playerState)
             {
                 case PlayerState.Run:
-                    _anim.SetBool("isWalk", true);
+                    _anim.SetBool("isRun", true);
+                    break;
+                case PlayerState.Jump:
+                    _anim.SetBool("isJump", true);
+                    break;
+                case PlayerState.Fall:
+                    _anim.SetBool("isFall", true);
+                    break;
+                case PlayerState.Crawl:
+                    _anim.SetBool("isCrawl", true);
                     break;
                 case PlayerState.Attack:
                     _anim.SetBool("isAttack", true);
@@ -84,13 +83,16 @@ namespace Player
         //重置所有状态
         void StateResume()
         {
-            _anim.SetBool("isWalk", false );
+            _anim.SetBool("isRun", false );
+            _anim.SetBool("isJump", false);
+            _anim.SetBool("isFall", false);
+            _anim.SetBool("isCrawl", false);
             _anim.SetBool("isAttack", false);
         }
 
-        public PlayerState CurState()
+        public PlayerState CurState
         {
-            return _playerState;
+            get {return _playerState;}
         }
 
     }
