@@ -19,7 +19,8 @@ namespace Player
         public float jumpForce;
         private Vector2 _moveDir;
         private bool canCrawlTree;
-
+        private bool touchGround;
+        
         public Vector2 MoveDir
         {
             get { return _moveDir; }
@@ -66,6 +67,15 @@ namespace Player
                         playerAnimState.TryChangeState(PlayerState.Crawl);
                     }
                     break;
+                case KeyCode.S:
+                    if (standState == StandState.OnGround)
+                    {
+                        Debug.Log("Ground");
+                        playerAnimState.TryChangeState(PlayerState.Idle);
+                        rb.bodyType = RigidbodyType2D.Dynamic;
+                        standState = StandState.OnGround;
+                    }
+                    break;
             }
             
         }
@@ -107,7 +117,7 @@ namespace Player
         
         void Update()
         {
-            Debug.Log(playerAnimState.CurState);
+            Debug.Log(playerAnimState.CurState + "  " + standState);
             Run();
             CheckGround();
             CheckState();
@@ -120,7 +130,6 @@ namespace Player
             else
             {
                 rb.velocity = _moveDir * speed;
-                playerAnimState.SetAnimSpeed(_moveDir.x * _moveDir.y);
             }
             
         }
@@ -172,9 +181,14 @@ namespace Player
                 {
 //                    playerAnimState.TryChangeState(PlayerState.Idle);
                     //AudioManager.PlayerAudio("fall" + Random.Range(0,2).ToString(), Random.Range(0.3f, 0.5f));
-                }
-                if(playerAnimState.CurState != PlayerState.Jump)
                     standState = StandState.OnGround;
+                }
+                touchGround = true;
+                
+            }
+            else
+            {
+                touchGround = false;
             }
             
             if (treeCollider == null)
