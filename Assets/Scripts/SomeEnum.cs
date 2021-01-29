@@ -6,6 +6,7 @@
         Run,
         Fall,
         Jump,
+        CrawlIdle,
         Crawl,
         Attack
     }

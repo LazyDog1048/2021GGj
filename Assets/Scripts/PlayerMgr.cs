@@ -202,7 +202,7 @@ namespace Player
             }
             
             
-            if(platformCollider == null && treeCollider == null)
+            if(platformCollider == null && standState != StandState.OnTree)
                 standState = StandState.Float;
             
         }
@@ -211,7 +211,8 @@ namespace Player
         {
             standState = StandState.Float;
         }
-        private void OnTriggerEnter2D(Collider2D other)
+
+        private void OnTriggerStay2D(Collider2D other)
         {
             if (other.CompareTag("Tree") && standState != StandState.OnTree)
             {
