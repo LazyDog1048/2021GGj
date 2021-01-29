@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Player;
 using UnityEngine;
@@ -54,6 +55,18 @@ namespace Player
 
         private void GetKeyPress(KeyCode key)
         {
+            switch (key)
+            {
+                case KeyCode.W:
+                    if (canCrawlTree && standState != StandState.OnTree)
+                    {
+                        Debug.Log("Crawl");
+                        rb.bodyType = RigidbodyType2D.Kinematic;
+                        standState = StandState.OnTree;
+                        playerAnimState.TryChangeState(PlayerState.Crawl);
+                    }
+                    break;
+            }
             
         }
 
@@ -67,14 +80,6 @@ namespace Player
                         rb.bodyType = RigidbodyType2D.Dynamic;
                         playerAnimState.TryChangeState(PlayerState.Jump);
                         Jump();
-                    }
-                    break;
-                case KeyCode.W:
-                    if (canCrawlTree && standState != StandState.OnTree)
-                    {
-                        rb.bodyType = RigidbodyType2D.Kinematic;
-                        standState = StandState.OnTree;
-                        playerAnimState.TryChangeState(PlayerState.Crawl);
                     }
                     break;
             }            
@@ -122,20 +127,21 @@ namespace Player
         
         private void Jump()
         {
-            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            if(standState != StandState.Float)
+                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
         
         private void CheckState()
         {
-            if (rb.velocity.y <= 0 && standState != StandState.OnGround)
+            if (standState == StandState.Float && rb.velocity.y <= 0)
             {
                 playerAnimState.TryChangeState(PlayerState.Fall);
             }
-            else if (_moveDir.x == 0 && rb.velocity.y <= 0 && standState == StandState.OnGround)
+            else if (standState == StandState.OnGround && _moveDir.x == 0 && rb.velocity.y <= 0)
             {
                 playerAnimState.TryChangeState(PlayerState.Idle);
             }
-            else if(_moveDir.x != 0 && rb.velocity.y <=0 && standState == StandState.OnGround)
+            else if(standState == StandState.OnGround && _moveDir.x != 0 && rb.velocity.y <=0)
             {
                 playerAnimState.TryChangeState(PlayerState.Run);
             }
@@ -171,23 +177,33 @@ namespace Player
                     standState = StandState.OnGround;
             }
             
-            if (treeCollider != null)
-            {
-                
-                if(standState != StandState.OnTree)
-                {
-                    canCrawlTree = true;                  
-                }
-            }
-            else
+            if (treeCollider == null)
             {
                 canCrawlTree = false;
+                if(standState == StandState.OnTree)
+                {
+                    rb.bodyType = RigidbodyType2D.Dynamic;
+                    Invoke(nameof(DelayJump),0.2f);
+                }
             }
+            
             
             if(platformCollider == null && treeCollider == null)
                 standState = StandState.Float;
             
         }
-        
+
+        private void DelayJump()
+        {
+            standState = StandState.Float;
+        }
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag("Tree") && standState != StandState.OnTree)
+            {
+                Debug.Log("CanCrawl");
+                canCrawlTree = true;
+            }
+        }
     }
 }
