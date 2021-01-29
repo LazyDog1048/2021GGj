@@ -15,7 +15,11 @@ namespace Player
             _anim = GetComponent<Animator>();
             playerMgr = GetComponent<PlayerMgr>();
         }
-            
+
+        public void SetAnimSpeed(float speed)
+        {
+            _anim.speed = speed;
+        }
         public virtual void TryChangeState(PlayerState playerState)
         {
             if(playerState == _playerState)

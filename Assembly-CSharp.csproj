@@ -132,9 +132,6 @@
  <Reference Include="Unity.2D.Common.Runtime">
  <HintPath>/Users/jihao/UnityProject/2021 ggj/Library/ScriptAssemblies/Unity.2D.Common.Runtime.dll</HintPath>
  </Reference>
- <Reference Include="Unity.2D.Tilemap.Editor">
- <HintPath>/Users/jihao/UnityProject/2021 ggj/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
- </Reference>
  <Reference Include="Unity.2D.SpriteShape.Runtime">
  <HintPath>/Users/jihao/UnityProject/2021 ggj/Library/ScriptAssemblies/Unity.2D.SpriteShape.Runtime.dll</HintPath>
  </Reference>
@@ -687,16 +684,6 @@
  <Reference Include="mscorlib">
  <HintPath>/Applications/Unity/Hub/Editor/2019.3.6f1/Unity.app/Contents/NetStandard/compat/2.0.0/shims/netfx/mscorlib.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
-      <Project>{BE91D163-CB1A-6CF6-70F8-DC8A113CF18B}</Project>
-      <Name>Unity.2D.Tilemap.Extras.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Tilemap.Extras.csproj">
-      <Project>{2A939F4B-385F-4771-FB4A-71FF57FE46D4}</Project>
-      <Name>Unity.2D.Tilemap.Extras</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

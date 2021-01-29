@@ -16,12 +16,12 @@ namespace Player
 
         public float speed;
         public float jumpForce;
-        private float _playerMoveX;
-        private bool isTouchTree;
+        private Vector2 _moveDir;
+        private bool canCrawlTree;
 
-        public float PlayerMoveX
+        public Vector2 MoveDir
         {
-            get { return _playerMoveX; }
+            get { return _moveDir; }
         }
 
         public StandState StandState
@@ -47,7 +47,9 @@ namespace Player
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyPress", GetKeyPress);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyDown", GetKeyDown);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyUp", GetKeyUp);
-            EventCenter.GetInstance().AddEventListener<float>("MoveHorizontal", GetHorizontal);
+//            EventCenter.GetInstance().AddEventListener<float>("MoveHorizontal", GetHorizontal);
+            EventCenter.GetInstance().AddEventListener<Vector2>("MoveVector2", GetMoveVector2);
+            
         }
 
         private void GetKeyPress(KeyCode key)
@@ -67,8 +69,9 @@ namespace Player
                     }
                     break;
                 case KeyCode.W:
-                    if (isTouchTree)
+                    if (canCrawlTree)
                     {
+                        standState = StandState.OnTree;
                         playerAnimState.TryChangeState(PlayerState.Crawl);
                     }
                     break;
@@ -80,17 +83,24 @@ namespace Player
             
         }
         
-        private void GetHorizontal(float horizontal)
+//        private void GetHorizontal(float horizontal)
+//        {
+//            _playerMoveX = horizontal;
+//            if(horizontal > 0)
+//                transform.localScale = Vector3.one;
+//            else if(horizontal < 0)
+//                transform.localScale = new Vector3(-1, 1, 1);
+//        }
+
+        private void GetMoveVector2(Vector2 moveDir)
         {
-            _playerMoveX = horizontal;
-            if(horizontal > 0)
-                transform.localScale = Vector3.one;
-            else if(horizontal < 0)
-                transform.localScale = new Vector3(-1, 1, 1);
+            
         }
         
         void Update()
         {
+            if(playerAnimState.CurState == PlayerState.Crawl)
+                playerAnimState.SetAnimSpeed(_moveDir.x * _moveDir.y);
             Run();
             CheckGround();
             CheckState();
@@ -98,7 +108,11 @@ namespace Player
         
         private void Run()
         {
-            rb.velocity = new Vector2(_playerMoveX * speed, rb.velocity.y);
+            if(playerAnimState.CurState != PlayerState.Crawl)
+                rb.velocity = new Vector2(_moveDir.x * speed, rb.velocity.y);
+            else
+                rb.velocity = _moveDir * speed;
+            
         }
         
         private void Jump()
@@ -112,32 +126,33 @@ namespace Player
             {
                 playerAnimState.TryChangeState(PlayerState.Fall);
             }
-            else if (_playerMoveX == 0 && rb.velocity.y <= 0 && standState == StandState.OnGround)
+            else if (_moveDir.x == 0 && rb.velocity.y <= 0 && standState == StandState.OnGround)
             {
                 playerAnimState.TryChangeState(PlayerState.Idle);
             }
-            else if(_playerMoveX != 0 && rb.velocity.y <=0 && standState == StandState.OnGround)
+            else if(_moveDir.x != 0 && rb.velocity.y <=0 && standState == StandState.OnGround)
             {
                 playerAnimState.TryChangeState(PlayerState.Run);
             }
+            
         }
         
         
-//    private void OnDrawGizmos()
-//    {
-//        Vector2 checkTreeSize = new Vector2(0.025f,box.bounds.size.y);            //0.3
-//        Vector2 checkTreePoint = new Vector2(transform.position.x + (box.bounds.size.x + checkTreeSize.x) - 0.125f , transform.position.y);//-0.1f
-//        Gizmos.DrawWireCube(checkTreePoint, checkTreeSize);
-//    }
-       
+    //    private void OnDrawGizmos()
+    //    {
+    //        Vector2 checkTreeSize = box.bounds.size;
+    //        Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
+    //        Gizmos.DrawWireCube(checkTreePoint, checkTreeSize);
+    //    }
+           
         private void CheckGround()
         {
             Vector2 checkSize = new Vector2(box.bounds.size.x, 0.025f);            //0.3
             Vector2 checkPoint = new Vector2(transform.position.x, transform.position.y - (box.bounds.size.y + checkSize.y) / 2 - 0.125f );//-0.1f
             Collider2D platformCollider = Physics2D.OverlapBox(checkPoint, checkSize, 0, LayerMask.GetMask("Platform"));
 
-            Vector2 checkTreeSize = new Vector2(0.025f,box.bounds.size.y);            //0.3
-            Vector2 checkTreePoint = new Vector2(transform.position.x + (box.bounds.size.x + checkTreeSize.x) - 0.125f , transform.position.y);//-0.1f
+            Vector2 checkTreeSize = box.bounds.size;
+            Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
             Collider2D treeCollider = Physics2D.OverlapBox(checkTreeSize, checkTreePoint, 0, LayerMask.GetMask("Tree"));
                 
             if (platformCollider != null)
@@ -156,18 +171,14 @@ namespace Player
                 
                 if(standState != StandState.OnTree)
                 {
+                    canCrawlTree = true;
 //                    playerAnimState.TryChangeState(PlayerState.Idle);
                     //AudioManager.PlayerAudio("fall" + Random.Range(0,2).ToString(), Random.Range(0.3f, 0.5f));
                 }
-
-                if (playerAnimState.CurState == PlayerState.Crawl)
-                    standState = StandState.OnTree;
-                else
-                    isTouchTree = true;
             }
             else
             {
-                isTouchTree = false;
+                canCrawlTree = false;
             }
             
             if(platformCollider == null && treeCollider == null)
