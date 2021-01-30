@@ -47,6 +47,7 @@ public class InPutMgr : BaseManager<InPutMgr>
         CheckKeyCode(KeyCode.A);
         CheckKeyCode(KeyCode.S);
         CheckKeyCode(KeyCode.D);
+        CheckKeyCode(KeyCode.J);
         GetAxis();
     }  
 

@@ -27,7 +27,7 @@ namespace Player
         public int maxPineConeCount;        //最大携带松果数量
         private int curPineConeCount;           //携带松果数量
         private int curPower;                   //体力
-        
+        private bool keepPinecone;              //手上是否有松果
         public Vector2 MoveDir
         {
             get { return _moveDir; }
@@ -57,10 +57,34 @@ namespace Player
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyDown", GetKeyDown);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyUp", GetKeyUp);
             EventCenter.GetInstance().AddEventListener<Vector2>("MoveVector2", GetMoveVector2);
-            UiMgr.Instance.InitPowerBar(maxPower);
+            
+            EventCenter.GetInstance().AddEventListener("GameStart",GameStart);
+            EventCenter.GetInstance().AddEventListener("StartLost",StartLost);
+            EventCenter.GetInstance().AddEventListener("StartFound",StartFound);
+            EventCenter.GetInstance().AddEventListener("GameOver",GameOver);
             
         }
 
+        private void GameStart()
+        {
+            UiMgr.Instance.InitPowerBar(maxPower);
+        }
+
+        private void StartLost()
+        {
+            
+        }
+        
+        private void StartFound()
+        {
+            
+        }
+        
+        private void GameOver()
+        {
+            
+        }
+        
         private void GetKeyPress(KeyCode key)
         {
             switch (key)
@@ -99,6 +123,10 @@ namespace Player
                         Jump();
                     }
                     break;
+                case KeyCode.J:
+                    if(keepPinecone && curPower != maxPower)
+                        EatPinecone();
+                    break;
             }            
         }
         
@@ -119,7 +147,7 @@ namespace Player
         
         void Update()
         {
-            Debug.Log(playerAnimState.CurState + "  " + standState);
+//            Debug.Log(playerAnimState.CurState + "  " + standState);
             Run();
             CheckGround();
             CheckState();
@@ -211,15 +239,17 @@ namespace Player
 
         public void EatPinecone()
         {
-            if (curPineConeCount > 1)
-            {
-                curPineConeCount--;
-                curPower += 3;
-                if (curPower > maxPower)
-                    curPower = maxPower;
-                
-                EventCenter.GetInstance().EventTrigger("PowerChange", curPower);
-            }
+            Debug.Log("EatPinecone");
+            keepPinecone = false;
+            EventCenter.GetInstance().EventTrigger("KeepPineconeState", keepPinecone);
+//            if (curPineConeCount > 1)
+//            {
+//                curPineConeCount--;
+//            }
+            curPower += 3;
+            if (curPower > maxPower)
+                curPower = maxPower;
+            EventCenter.GetInstance().EventTrigger("PowerChange", curPower);
         }
 
         private void DelayJump()
@@ -232,6 +262,13 @@ namespace Player
             {
                 Debug.Log("CanCrawl");
                 canCrawlTree = true;
+            }
+            if(other.CompareTag("Pinecone") && !keepPinecone)
+            {
+                Debug.Log("PickPinecone");
+                keepPinecone = true;
+                EventCenter.GetInstance().EventTrigger("KeepPineconeState", keepPinecone);
+                Destroy(other.gameObject);
             }
         }
     }

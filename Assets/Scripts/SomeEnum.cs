@@ -18,4 +18,11 @@
         Float
     }
 
+    public enum GameState
+    {
+        GameStart,
+        Lost,
+        Found,
+        GameOver
+    }
 }
