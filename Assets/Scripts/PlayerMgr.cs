@@ -22,12 +22,13 @@ namespace Player
         private bool touchGround;
 
         //人物属性
-        [Header("人物属性")]
+        [Header("人物属性")] 
+        public int pineconePower;            //吃松果回复体力
         public int maxPower;                //最大体力
         public int maxPineConeCount;        //最大携带松果数量
         private int curPineConeCount;           //携带松果数量
         private int curPower;                   //体力
-        private bool keepPinecone;              //手上是否有松果
+//        private bool keepPinecone;              //手上是否有松果
         public Vector2 MoveDir
         {
             get { return _moveDir; }
@@ -124,7 +125,7 @@ namespace Player
                     }
                     break;
                 case KeyCode.J:
-                    if(keepPinecone && curPower != maxPower)
+                    if(curPineConeCount >0 && curPower != maxPower)
                         EatPinecone();
                     break;
             }            
@@ -240,15 +241,13 @@ namespace Player
         public void EatPinecone()
         {
             Debug.Log("EatPinecone");
-            keepPinecone = false;
-            EventCenter.GetInstance().EventTrigger("KeepPineconeState", keepPinecone);
-//            if (curPineConeCount > 1)
-//            {
-//                curPineConeCount--;
-//            }
+
+            curPineConeCount--;
             curPower += 3;
             if (curPower > maxPower)
                 curPower = maxPower;
+            
+            EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
             EventCenter.GetInstance().EventTrigger("PowerChange", curPower);
         }
 
@@ -263,11 +262,11 @@ namespace Player
                 Debug.Log("CanCrawl");
                 canCrawlTree = true;
             }
-            if(other.CompareTag("Pinecone") && !keepPinecone)
+            if(other.CompareTag("Pinecone") && curPineConeCount < maxPineConeCount)
             {
                 Debug.Log("PickPinecone");
-                keepPinecone = true;
-                EventCenter.GetInstance().EventTrigger("KeepPineconeState", keepPinecone);
+                curPineConeCount++;
+                EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
                 Destroy(other.gameObject);
             }
         }
