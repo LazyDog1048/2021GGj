@@ -59,10 +59,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\BaseEnemyAnimStateMgr.cs" />
+     <Compile Include="Assets\Scripts\Item\PineconeMgr.cs" />
      <Compile Include="Assets\Scripts\Other\Curve.cs" />
+     <Compile Include="Assets\Scripts\Other\SomeEnum.cs" />
      <Compile Include="Assets\Scripts\Other\Tools.cs" />
-     <Compile Include="Assets\Scripts\PlayerAnimStateMgr.cs" />
-     <Compile Include="Assets\Scripts\PlayerMgr.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerAnimStateMgr.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerMgr.cs" />
      <Compile Include="Assets\Scripts\ProjectBase\AudioManager.cs" />
      <Compile Include="Assets\Scripts\ProjectBase\Base\AutoPush.cs" />
      <Compile Include="Assets\Scripts\ProjectBase\Base\BaseManager.cs" />
@@ -77,7 +79,6 @@
      <Compile Include="Assets\Scripts\ProjectBase\UIMgr\BasePenal.cs" />
      <Compile Include="Assets\Scripts\ProjectBase\UIMgr\LoginPenal.cs" />
      <Compile Include="Assets\Scripts\ProjectBase\UIMgr\UIMgr.cs" />
-     <Compile Include="Assets\Scripts\SomeEnum.cs" />
      <Compile Include="Assets\Scripts\UI\UiMgr.cs" />
      <Compile Include="Assets\Water2D Surface\scripts\Water2DScript.cs" />
      <Compile Include="Assets\Water2D Surface\scripts\WaterReflectableScript.cs" />

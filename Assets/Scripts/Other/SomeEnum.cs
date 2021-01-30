@@ -25,4 +25,17 @@
         Found,
         GameOver
     }
+
+    public enum PineconeState
+    {
+        Hang,
+        Shake,
+        Fall,
+        OnGround
+    }
+}
+
+interface IPoolObj
+{
+    void Push();
 }

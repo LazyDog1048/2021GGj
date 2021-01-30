@@ -10,12 +10,18 @@
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
           <e p="BaseEnemyAnimStateMgr.cs" t="Include" />
+          <e p="Item" t="Include">
+            <e p="PineconeMgr.cs" t="Include" />
+          </e>
           <e p="Other" t="Include">
             <e p="Curve.cs" t="Include" />
+            <e p="SomeEnum.cs" t="Include" />
             <e p="Tools.cs" t="Include" />
           </e>
-          <e p="PlayerAnimStateMgr.cs" t="Include" />
-          <e p="PlayerMgr.cs" t="Include" />
+          <e p="Player" t="Include">
+            <e p="PlayerAnimStateMgr.cs" t="Include" />
+            <e p="PlayerMgr.cs" t="Include" />
+          </e>
           <e p="ProjectBase" t="Include">
             <e p="AudioManager.cs" t="Include" />
             <e p="Base" t="Include">
@@ -46,7 +52,6 @@
               <e p="UIMgr.cs" t="Include" />
             </e>
           </e>
-          <e p="SomeEnum.cs" t="Include" />
           <e p="UI" t="Include">
             <e p="UIMgr.cs" t="Include" />
           </e>

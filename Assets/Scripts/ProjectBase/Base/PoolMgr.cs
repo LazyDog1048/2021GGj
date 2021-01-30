@@ -88,9 +88,7 @@ public class PoolMgr : MonoBehaviour
 
     private void Start()
     {
-        InitAPool("FireBall","Bullet/FireBall");
-        InitAPool("PeaBall","Bullet/PeaBall");
-        
+        InitAPool("Pinecone","Prefabs/Pinecone");
     }
 
     public void InitAPool(string name, string path)

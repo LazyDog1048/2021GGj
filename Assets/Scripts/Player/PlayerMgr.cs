@@ -267,7 +267,7 @@ namespace Player
                 Debug.Log("PickPinecone");
                 curPineConeCount++;
                 EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
-                Destroy(other.gameObject);
+                other.GetComponent<IPoolObj>().Push();
             }
         }
     }
