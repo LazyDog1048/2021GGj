@@ -23,6 +23,7 @@ public class UiMgr : MonoBehaviour
     private GameObject stateChangeAnim;
     private Button startBtn;
     private Button quitBtn;
+    private Button gameOverBtn;
     private Transform powerBar;
     private List<GameObject> powerList;
     private Text pineconeNum;
@@ -31,8 +32,9 @@ public class UiMgr : MonoBehaviour
 
     private Image wipeImage;
     private Text wipeText;
-    
-    
+
+    private GameObject gameOver;
+    private Text endPineconeCount;
     
     private void Awake()
     {
@@ -50,6 +52,9 @@ public class UiMgr : MonoBehaviour
         pineconeNum = transform.Find("PineconeNum").Find("Num").GetComponent<Text>();
         gameStateText = transform.Find("GameState").GetComponent<Text>();
         timePinel = gameStateText.transform.Find("TimePanel").GetComponent<Text>();
+
+        gameOver = transform.Find("GameOver").gameObject;
+        endPineconeCount = gameOver.transform.Find("PineconeNum").Find("Num").GetComponent<Text>();
         
         wipeImage = stateChangeAnim.transform.Find("Wipe").GetComponent<Image>();
         wipeText = stateChangeAnim.transform.Find("Wipe").Find("Text").GetComponent<Text>();
@@ -57,11 +62,13 @@ public class UiMgr : MonoBehaviour
         EventCenter.GetInstance().AddEventListener<bool>("KeepPineconeState", KeepPineconeState);
         EventCenter.GetInstance().AddEventListener<int>("PowerChange", SetPower);
         EventCenter.GetInstance().AddEventListener<int>("PineconeCollect", PineconeCollect);
+        EventCenter.GetInstance().AddEventListener<int>("EndPineconeCount", EndPineconeCount);
         
         
         startBtn = transform.Find("StartGame").Find("Start").GetComponent<Button>();
         quitBtn = transform.Find("StartGame").Find("Quit").GetComponent<Button>();
         
+        gameOverBtn = transform.Find("GameOver").Find("Quit").GetComponent<Button>();
         startBtn.onClick.AddListener(() =>
         {
             startBtn.transform.parent.gameObject.SetActive(false);
@@ -69,6 +76,11 @@ public class UiMgr : MonoBehaviour
         });
         
         quitBtn.onClick.AddListener(() =>
+        {
+            Application.Quit();
+        });
+        
+        gameOverBtn.onClick.AddListener(() =>
         {
             Application.Quit();
         });
@@ -106,6 +118,12 @@ public class UiMgr : MonoBehaviour
         pineconeNum.text = num.ToString();
     }
     
+    private void EndPineconeCount(int num)
+    {
+        endPineconeCount.text = num.ToString();
+    }
+    
+    
     private void StateChange()
     {
         stateChangeAnim.SetActive(true);
@@ -122,16 +140,20 @@ public class UiMgr : MonoBehaviour
         }
         else if (gameState == GameState.Found)
         {
-            
+            wipeImage.color = foundColor;
+            wipeText.text = "GameOver";
         }
-        Invoke(nameof(StateChangeEnd),1.5f);
+        StateChangeEnd();
+        Invoke(nameof(AnimClose),1f);
     }
 
-    private void StateChangeEnd()
+    private void AnimClose()
     {
         Debug.Log("End");
-        stateChangeAnim.SetActive(false);
-        
+        stateChangeAnim.SetActive(false);   
+    }
+    private void StateChangeEnd()
+    {
         if (gameState == GameState.GameStart)
         {
             EventCenter.GetInstance().EventTrigger("StartLost");
@@ -175,19 +197,28 @@ public class UiMgr : MonoBehaviour
     private void GameLost()
     {
         Debug.Log("Lost");
+        ChangeUiState(true);
         StartCoroutine(UpdateTime(startLoseSec));
     }
     private void GameFound()
     {
-        
+        ChangeUiState(false);
         StartCoroutine(UpdateTime(startFoundSec));
         Debug.Log("Found");
     }
     private void GameOver()
     {
+        gameOver.SetActive(true);
         gameState = GameState.GameOver;
         Debug.Log("GameOver");
         EventCenter.GetInstance().EventTrigger("GameOver");
+    }
+
+    private void ChangeUiState(bool isLost)
+    {
+        transform.Find("PineconeNum").gameObject.SetActive(!isLost);
+        transform.Find("Pinecone").gameObject.SetActive(isLost);
+        powerBar.gameObject.SetActive(isLost);
     }
     IEnumerator UpdateTime(int time)
     {

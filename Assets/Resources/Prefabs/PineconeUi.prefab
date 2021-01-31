@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 66.51, y: 89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5235248830986193621
 CanvasRenderer:
@@ -63,7 +63,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1775669009216684005, guid: fde829e8cfb1743cab8662ab9fabfbda,
+  m_Sprite: {fileID: -7520347221746427802, guid: a743d7c8047644ea78160b2f8de6547f,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 5235248832409944671}
   - component: {fileID: 5235248832409944670}
   m_Layer: 5
-  m_Name: pinecone
+  m_Name: PineconeUi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,7 +155,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 66.51, y: 89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5235248833074725259
 CanvasRenderer:
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1775669009216684005, guid: fde829e8cfb1743cab8662ab9fabfbda,
+  m_Sprite: {fileID: -7520347221746427802, guid: a743d7c8047644ea78160b2f8de6547f,
     type: 3}
   m_Type: 0
   m_PreserveAspect: 0

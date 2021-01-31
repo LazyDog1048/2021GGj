@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Enemy;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class Pig : MonoBehaviour,IEnemy
@@ -20,6 +22,7 @@ public class Pig : MonoBehaviour,IEnemy
     
     private void StartFound()
     {
+        AudioManager.EnemyFXAudio("PigSmell",0);
         Destroy(gameObject);
     }
    
@@ -124,5 +127,10 @@ public class Pig : MonoBehaviour,IEnemy
         target = new Vector3(pinecone.transform.position.x - 0.4f,0.15f);
         Debug.Log(target);
         animState.TryChangeState(EnemyState.Run);
+    }
+
+    private void OnDestroy()
+    {
+        EventCenter.GetInstance().RemoveEventListener("StartFound",StartFound);
     }
 }

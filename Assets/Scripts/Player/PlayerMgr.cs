@@ -34,6 +34,8 @@ namespace Player
         public int maxPineConeCount;        //最大携带松果数量
         private int curPineConeCount;           //携带松果数量
         private int curPower;                   //体力
+
+        private int foundPinecone;
 //        private bool keepPinecone;              //手上是否有松果
         public Vector2 MoveDir
         {
@@ -60,9 +62,9 @@ namespace Player
                 Instance = this;
             else
                 Destroy(gameObject);
-        }    
+        }
 
-        
+        private bool gameOver;
         void Start()
         {
             standState = StandState.OnGround;
@@ -114,12 +116,15 @@ namespace Player
         
         private void StartFound()
         {
-            
+            foundPinecone += curPineConeCount;
+            EventCenter.GetInstance().EventTrigger("PineconeCollect", foundPinecone);
         }
         
         private void GameOver()
         {
-            
+            EventCenter.GetInstance().EventTrigger("EndPineconeCount", foundPinecone);
+            InPutMgr.GetInstance().StartOrEnd(false);
+            gameOver = true;
         }
         
         private void GetKeyPress(KeyCode key)
@@ -169,11 +174,11 @@ namespace Player
                     }
                     break;
                 case KeyCode.K:
-                        AudioManager.PlayerFxAudio(dig,0.5f,true);
+                        AudioManager.PlayerFxAudio(hit,0.5f,true);
                         playerAnimState.TryChangeState(PlayerState.Attack);
                     break;
                 case KeyCode.U:
-                    if(curPineConeCount >0 && curPower != maxPower)
+                    if(curPineConeCount >0 && curPower != maxPower && !gameOver)
                         EatPinecone();
                     break;
             }            
@@ -346,12 +351,20 @@ namespace Player
             {
                 canCrawlTree = true;
             }
-            if(other.CompareTag("Pinecone") && curPineConeCount < maxPineConeCount)
+            if(other.CompareTag("Pinecone") )
             {
-                curPineConeCount++;
-                AudioManager.PlayerFxAudio(getPinecone,1,false);
-                EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
-                other.GetComponent<IPoolObj>().Push();
+                if (curPineConeCount < maxPineConeCount && !gameOver)
+                {
+                    curPineConeCount++;
+                    AudioManager.PlayerFxAudio(getPinecone,1,false);
+                    EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
+                    other.GetComponent<IPoolObj>().Push();
+                }
+                else if (gameOver)
+                {
+                    foundPinecone++;
+                    EventCenter.GetInstance().EventTrigger("PineconeCollect", foundPinecone);
+                }
             }
 
             if (other.CompareTag("Enemy") && playerAnimState.CurState == PlayerState.Attack)

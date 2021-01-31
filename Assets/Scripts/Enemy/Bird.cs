@@ -175,4 +175,9 @@ public class Bird : MonoBehaviour,IEnemy
         float randomX = target.x + Random.Range(-3f, 3f);
         transform.position = new Vector2(randomX,target.y + 5);
     }
+    
+    private void OnDestroy()
+    {
+        EventCenter.GetInstance().RemoveEventListener("StartFound",StartFound);
+    }
 }
