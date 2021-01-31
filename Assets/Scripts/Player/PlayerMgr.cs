@@ -258,12 +258,12 @@ namespace Player
         }
         
         
-//        private void OnDrawGizmos()
-//        {
-//            Vector2 checkSize = new Vector2(box.bounds.size.x, 0.025f);            //0.3
-//            Vector2 checkPoint = new Vector2(transform.position.x, transform.position.y - (box.bounds.size.y + checkSize.y) / 2 - 0.125f );//-0.1f
-//            Gizmos.DrawWireCube(checkSize, checkPoint);
-//        }
+        private void OnDrawGizmos()
+        {
+            Vector2 checkTreeSize = new Vector2(box.bounds.size.x/2, box.bounds.size.y);            //0.3
+            Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
+            Gizmos.DrawWireCube(checkTreeSize, checkTreePoint);
+        }
            
         private void CheckGround()
         {
@@ -279,7 +279,7 @@ namespace Player
             {
                 if(standState != StandState.OnGround)
                 {
-//                    playerAnimState.TryChangeState(PlayerState.Idle);
+//                  playerAnimState.TryChangeState(PlayerState.Idle);
                     //AudioManager.PlayerAudio("fall" + Random.Range(0,2).ToString(), Random.Range(0.3f, 0.5f));
                     standState = StandState.OnGround;
                 }
@@ -296,6 +296,7 @@ namespace Player
                 canCrawlTree = false;
                 if(standState == StandState.OnTree)
                 {
+                    playerAnimState.ChangeState(PlayerState.Fall);
                     rb.bodyType = RigidbodyType2D.Dynamic;
                     Invoke(nameof(DelayJump),0.2f);
                 }
