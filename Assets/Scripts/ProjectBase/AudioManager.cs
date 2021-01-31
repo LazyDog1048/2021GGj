@@ -28,6 +28,7 @@ public class AudioManager : MonoBehaviour
     AudioSource playerSource;
     AudioSource EnemyFXSource;
 
+    
     public AudioMixerGroup ambientGroup,musicGroup,FXGroup, PlayerGroup, EnemyFXGroup;
     private void Awake()
     {
@@ -53,11 +54,12 @@ public class AudioManager : MonoBehaviour
 
         
     }
+    
 
     private void Start()
     {
-        MusicAudio("BackGroundMisuc", 0.5f, true);
-        AmbientAudio("brook", 0.5f, true);
+        MusicAudio("Background", 0.5f, true);
+//        AmbientAudio("brook", 0.5f, true);
     }
 
     public static void AmbientAudio(string name, float volume = 0.5f, bool isLoop = false)

@@ -37,7 +37,7 @@ public class PineconeMgr : MonoBehaviour,IPoolObj
         Invoke(nameof(StartFall),ShakeTime);
     }
 
-    private void StartFall()
+    public void StartFall()
     {
         pineconeState = PineconeState.Fall;
         _anim.enabled = false;
@@ -48,13 +48,20 @@ public class PineconeMgr : MonoBehaviour,IPoolObj
     {
         if (other.CompareTag("Floor"))
         {
+            PoolMgr.Instance.AddPinecone(this);
             pineconeState = PineconeState.OnGround;    
         }
     }
 
+    public void AnimalCatch()
+    {
+        _rb.bodyType = RigidbodyType2D.Kinematic;
+    }
     public void Push()
     {
-        PoolMgr.GetInstance().PushObj(gameObject);
+        Debug.Log("Push");
+        PoolMgr.Instance.RemovePinecone(this);
+        Destroy(gameObject);
     }
     
 }

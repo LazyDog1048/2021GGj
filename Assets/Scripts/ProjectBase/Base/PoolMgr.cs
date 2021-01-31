@@ -66,29 +66,26 @@ public class PoolData
 }
 public class PoolMgr : MonoBehaviour
 {
-    static PoolMgr instance;
+    public static PoolMgr Instance;
 
     public Dictionary<string, PoolData> PoolDic = new Dictionary<string, PoolData>();        //动态池
+    public List<PineconeMgr> pineconList = new List<PineconeMgr>();
+    public List<HoleMgr> holeList = new List<HoleMgr>();
     
     //private GameObject poolObj = new GameObject("pool");
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
             Destroy(gameObject);
 //        DontDestroyOnLoad(gameObject);
     }
 
-    public static PoolMgr GetInstance()
-    {
-        return instance;
-    }
-
     private void Start()
     {
-        InitAPool("Pinecone","Prefabs/Pinecone");
+//        InitAPool("Pinecone","Prefabs/Pinecone");
     }
 
     public void InitAPool(string name, string path)
@@ -138,11 +135,21 @@ public class PoolMgr : MonoBehaviour
         }
     }
 
-   
-
     //清空缓存池方法
     public void Clear()
     {
         PoolDic.Clear();
+    }
+
+    public void AddPinecone(PineconeMgr pinecone)
+    {
+        pineconList.Add(pinecone);
+    }
+
+    
+    public void RemovePinecone(PineconeMgr pinecone)
+    {
+        if(pineconList.Contains(pinecone))
+            pineconList.Remove(pinecone);
     }
 }

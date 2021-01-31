@@ -1,4 +1,6 @@
-﻿namespace Player
+﻿using UnityEngine;
+
+namespace Player
 {
     public enum PlayerState
     {
@@ -8,6 +10,7 @@
         Jump,
         Crawl,
         CrawlIdle,
+        Dig,
         Attack
     }
     
@@ -33,9 +36,25 @@
         Fall,
         OnGround
     }
+
+    public enum HoleState
+    {
+        NotDig,
+        Stage1,
+        Stage2,
+        Colding,
+        Complete,
+        HadPC
+    }
 }
 
 interface IPoolObj
 {
     void Push();
+}
+
+interface IEnemy
+{
+    void Born(PineconeMgr targetPinecone);
+    void TakeDamage();
 }

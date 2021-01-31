@@ -58,8 +58,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BaseEnemyAnimStateMgr.cs" />
+     <Compile Include="Assets\Scripts\Enemy\BaseEnemyAnimStateMgr.cs" />
+     <Compile Include="Assets\Scripts\Enemy\Bird.cs" />
+     <Compile Include="Assets\Scripts\Enemy\EnemyGenerate.cs" />
+     <Compile Include="Assets\Scripts\Enemy\Pig.cs" />
+     <Compile Include="Assets\Scripts\Item\HoleMgr.cs" />
      <Compile Include="Assets\Scripts\Item\PineconeMgr.cs" />
+     <Compile Include="Assets\Scripts\Item\PineconeTree.cs" />
      <Compile Include="Assets\Scripts\Other\Curve.cs" />
      <Compile Include="Assets\Scripts\Other\SomeEnum.cs" />
      <Compile Include="Assets\Scripts\Other\Tools.cs" />

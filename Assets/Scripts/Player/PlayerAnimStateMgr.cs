@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,20 +7,35 @@ namespace Player
 {
     public class PlayerAnimStateMgr : MonoBehaviour
     {
+        public static PlayerAnimStateMgr Instance;
+        
+        
         private PlayerState _playerState;
         private PlayerState _lastState;
         private Animator _anim;
         private PlayerMgr playerMgr;
+        
+        
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+            else if(Instance != this)
+                Destroy(gameObject);
+        }
+
         void Start()
         {
             _anim = GetComponent<Animator>();
             playerMgr = GetComponent<PlayerMgr>();
         }
 
+        
         public void SetAnimSpeed(float speed)
         {
             _anim.speed = speed;
         }
+        
         public virtual void TryChangeState(PlayerState playerState)
         {
             if(playerState == _playerState)
@@ -28,9 +44,11 @@ namespace Player
             switch (playerState)
             {
                 case PlayerState.Idle:
+                    if(_playerState != PlayerState.Dig) 
                         _playerState = playerState;
                     break;
                 case PlayerState.Run:
+                    if(_playerState != PlayerState.Dig)
                         _playerState = playerState;
                     break;
                 case PlayerState.Jump:
@@ -40,6 +58,12 @@ namespace Player
                         _playerState = playerState;
                     break;
                 case PlayerState.Crawl:
+                    _playerState = playerState;
+                    break;
+                case PlayerState.Dig:
+                    _playerState = playerState;
+                    break;
+                case PlayerState.Attack:
                     _playerState = playerState;
                     break;
             }
@@ -76,6 +100,9 @@ namespace Player
                 case PlayerState.Fall:
                     _anim.SetBool("isFall", true);
                     break;
+                case PlayerState.Dig:
+                    _anim.SetBool("isDig", true);
+                    break;
                 case PlayerState.Crawl:
                     _anim.SetBool("isCrawl", true);
                     break;
@@ -90,6 +117,7 @@ namespace Player
             _anim.SetBool("isRun", false );
             _anim.SetBool("isJump", false);
             _anim.SetBool("isFall", false);
+            _anim.SetBool("isDig", false);
             _anim.SetBool("isCrawl", false);
             _anim.SetBool("isAttack", false);
         }

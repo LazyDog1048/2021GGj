@@ -9,9 +9,16 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
-          <e p="BaseEnemyAnimStateMgr.cs" t="Include" />
+          <e p="Enemy" t="Include">
+            <e p="BaseEnemyAnimStateMgr.cs" t="Include" />
+            <e p="Bird.cs" t="Include" />
+            <e p="EnemyGenerate.cs" t="Include" />
+            <e p="Pig.cs" t="Include" />
+          </e>
           <e p="Item" t="Include">
+            <e p="HoleMgr.cs" t="Include" />
             <e p="PineconeMgr.cs" t="Include" />
+            <e p="PineconeTree.cs" t="Include" />
           </e>
           <e p="Other" t="Include">
             <e p="Curve.cs" t="Include" />

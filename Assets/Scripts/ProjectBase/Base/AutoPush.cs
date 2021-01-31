@@ -12,11 +12,11 @@ public class AutoPush : MonoBehaviour
     }
     private void DelayPush()
     {
-        PoolMgr.GetInstance().PushObj(gameObject);
+        PoolMgr.Instance.PushObj(gameObject);
     }
 
     public void PushRightNow()
     {
-        PoolMgr.GetInstance().PushObj(gameObject);
+        PoolMgr.Instance.PushObj(gameObject);
     }
 }

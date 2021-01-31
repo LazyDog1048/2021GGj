@@ -10,6 +10,7 @@ namespace Player
     {
         
         public static PlayerMgr Instance;
+        
         private BoxCollider2D box;
         private Rigidbody2D rb;
         private PlayerAnimStateMgr playerAnimState;
@@ -21,6 +22,11 @@ namespace Player
         private bool canCrawlTree;
         private bool touchGround;
 
+        //audio Clip
+        private AudioClip hit;
+        private AudioClip jump;
+        private AudioClip dig;
+        private AudioClip getPinecone;
         //人物属性
         [Header("人物属性")] 
         public int pineconePower;            //吃松果回复体力
@@ -39,6 +45,15 @@ namespace Player
             get { return standState; }
         }
 
+        public int CurPinecone
+        {
+            get { return curPineConeCount; }
+        }
+        
+        public int CurPower
+        {
+            get { return curPower; }
+        }
         void Awake()
         {
             if (Instance == null)
@@ -47,6 +62,7 @@ namespace Player
                 Destroy(gameObject);
         }    
 
+        
         void Start()
         {
             standState = StandState.OnGround;
@@ -63,7 +79,27 @@ namespace Player
             EventCenter.GetInstance().AddEventListener("StartLost",StartLost);
             EventCenter.GetInstance().AddEventListener("StartFound",StartFound);
             EventCenter.GetInstance().AddEventListener("GameOver",GameOver);
+
+            StartCoroutine(LoadAudio());
+        }
+        
+        IEnumerator LoadAudio()
+        {
+            ResourceRequest rr = Resources.LoadAsync<AudioClip>("Sound/Dig");
+            yield return rr;
+            dig = rr.asset as AudioClip;
             
+            rr = Resources.LoadAsync<AudioClip>("Sound/Jump");
+            yield return rr;
+            jump = rr.asset as AudioClip;
+            
+            rr = Resources.LoadAsync<AudioClip>("Sound/Hit");
+            yield return rr;
+            hit = rr.asset as AudioClip;
+
+            rr = Resources.LoadAsync<AudioClip>("Sound/GetPinecone");
+            yield return rr;
+            getPinecone = rr.asset as AudioClip;
         }
 
         private void GameStart()
@@ -119,12 +155,24 @@ namespace Player
                 case KeyCode.Space:
                     if (standState == StandState.OnGround || standState == StandState.OnTree)
                     {
+                        AudioManager.PlayerFxAudio(jump,1,false);
                         rb.bodyType = RigidbodyType2D.Dynamic;
                         playerAnimState.TryChangeState(PlayerState.Jump);
                         Jump();
                     }
                     break;
                 case KeyCode.J:
+                    if (standState == StandState.OnGround)
+                    {
+                        AudioManager.PlayerFxAudio(dig,0.5f,true);
+                        DigHole(true);
+                    }
+                    break;
+                case KeyCode.K:
+                        AudioManager.PlayerFxAudio(dig,0.5f,true);
+                        playerAnimState.TryChangeState(PlayerState.Attack);
+                    break;
+                case KeyCode.U:
                     if(curPineConeCount >0 && curPower != maxPower)
                         EatPinecone();
                     break;
@@ -133,7 +181,21 @@ namespace Player
         
         private void GetKeyUp(KeyCode key)
         {
-            
+            switch (key)
+            {
+                case KeyCode.J:
+                    if (standState == StandState.OnGround)
+                    {
+                        AudioManager.PlayerFxAudio(dig,0,false);
+                        DigHole(false);
+                    }
+                    break;
+                
+                case KeyCode.K:
+                    AudioManager.PlayerFxAudio(dig,0,false);
+                    playerAnimState.TryChangeState(PlayerState.Idle);
+                    break;
+            }
         }
 
 
@@ -173,6 +235,9 @@ namespace Player
         
         private void CheckState()
         {
+            if(playerAnimState.CurState == PlayerState.Dig || playerAnimState.CurState == PlayerState.Attack)
+                return;
+            
             if (standState == StandState.Float && rb.velocity.y <= 0)
             {
                 playerAnimState.TryChangeState(PlayerState.Fall);
@@ -243,7 +308,7 @@ namespace Player
             Debug.Log("EatPinecone");
 
             curPineConeCount--;
-            curPower += 3;
+            curPower += pineconePower;
             if (curPower > maxPower)
                 curPower = maxPower;
             
@@ -251,23 +316,47 @@ namespace Player
             EventCenter.GetInstance().EventTrigger("PowerChange", curPower);
         }
 
+        public void DigHole(bool isDig)
+        {
+            if(isDig)
+                playerAnimState.TryChangeState(PlayerState.Dig);
+            if(!isDig)
+                playerAnimState.ChangeState(PlayerState.Idle);
+        }
+
+         
         private void DelayJump()
         {
             standState = StandState.Float;
+        }
+
+        public void DigComlete()
+        {
+            curPower--;
+            EventCenter.GetInstance().EventTrigger("PowerChange", curPower);
+        }
+        public void BuryPinecone()
+        {
+            curPineConeCount--;
+            EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
         }
         private void OnTriggerStay2D(Collider2D other)
         {
             if (other.CompareTag("Tree") && standState != StandState.OnTree)
             {
-                Debug.Log("CanCrawl");
                 canCrawlTree = true;
             }
             if(other.CompareTag("Pinecone") && curPineConeCount < maxPineConeCount)
             {
-                Debug.Log("PickPinecone");
                 curPineConeCount++;
+                AudioManager.PlayerFxAudio(getPinecone,1,false);
                 EventCenter.GetInstance().EventTrigger("KeepPineconeState", curPineConeCount > 0);
                 other.GetComponent<IPoolObj>().Push();
+            }
+
+            if (other.CompareTag("Enemy") && playerAnimState.CurState == PlayerState.Attack)
+            {
+                other.GetComponent<IEnemy>().TakeDamage();
             }
         }
     }
