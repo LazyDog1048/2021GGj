@@ -104,6 +104,7 @@ public class Pig : MonoBehaviour,IEnemy
 
     public void TakeDamage()
     {
+        AudioManager.PlayerFxAudio("Hit",0.5f,true);
         AudioManager.EnemyFXAudio("PigHurt");
         if (Pinecone != null)
         {

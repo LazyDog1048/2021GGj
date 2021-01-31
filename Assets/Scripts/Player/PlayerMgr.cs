@@ -174,7 +174,6 @@ namespace Player
                     }
                     break;
                 case KeyCode.K:
-                        AudioManager.PlayerFxAudio(hit,0.5f,true);
                         playerAnimState.TryChangeState(PlayerState.Attack);
                     break;
                 case KeyCode.U:

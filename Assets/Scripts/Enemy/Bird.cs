@@ -153,6 +153,7 @@ public class Bird : MonoBehaviour,IEnemy
     }
     public void TakeDamage()
     {
+        AudioManager.PlayerFxAudio("Hit",0.5f,true);
         Debug.Log("fall");
         AudioManager.AmbientAudio("BirdHurt");
         if (Pinecone != null)
