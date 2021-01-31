@@ -63,7 +63,7 @@ public class Bird : MonoBehaviour,IEnemy
         {
             isfloat = true;
             floatPoint = transform.position;
-            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3(-1,1,1);
             floatTarget = floatPoint + new Vector2(-3, 0);
         }else if (floatTime <= 0)
         {
@@ -78,12 +78,12 @@ public class Bird : MonoBehaviour,IEnemy
         {
             if (floatTarget.x - floatPoint.x > 0)
             {
-                transform.localScale = Vector3.one;
+                transform.localScale = new Vector3(-1,1,1);
                 floatTarget = floatPoint + new Vector2(-3, 0);
             }
             else
             {
-                transform.localScale = new Vector3(-1,1,1);
+                transform.localScale = Vector3.one;
                 floatTarget = floatPoint + new Vector2(3, 0);
             }
         }
@@ -92,11 +92,11 @@ public class Bird : MonoBehaviour,IEnemy
     {
         if (transform.position.x - target.x > 0 && !isfloat)
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3(-1,1,1);
         }
         else if(!isfloat) 
         {
-            transform.localScale = new Vector3(-1,1,1);
+            transform.localScale = Vector3.one;
         }
         
         Fly();
@@ -105,10 +105,11 @@ public class Bird : MonoBehaviour,IEnemy
 
     private IEnumerator Diging()
     {
-        while (digTime >= 0)
+        float time = digTime;
+        while (time >= 0)
         {
             yield return new WaitForSeconds(0.2f);
-            digTime -= 0.2f;
+            time -= 0.2f;
         }
         
         if (Pinecone != null && animState.CurState == EnemyState.Attack)
@@ -137,7 +138,7 @@ public class Bird : MonoBehaviour,IEnemy
 
     public void Push()
     {
-        if(Pinecone != null)
+        if(transform.Find("Pinecone")!=null)
         {
             Pinecone.Push();
         }
@@ -145,6 +146,7 @@ public class Bird : MonoBehaviour,IEnemy
     }
     public void TakeDamage()
     {
+        Debug.Log("fall");
         AudioManager.AmbientAudio("BirdHurt");
         if (Pinecone != null)
         {

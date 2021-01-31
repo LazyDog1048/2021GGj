@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1130782137474622610}
   - component: {fileID: 1130782137474622615}
   - component: {fileID: 1130782137474622614}
+  - component: {fileID: 894933617619213883}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Enemy
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1130782137474622611}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.64, y: 5.15, z: 0}
+  m_LocalPosition: {x: 99, y: 99, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -73,8 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 39918737
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1207841707077272702, guid: f9f5a1dd8fbfb4e798f7d9cfbc85b9ce,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6be207666422049f1933b6d10cd4623c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   floatTime: 2
-  digTime: 2
+  digTime: 5
 --- !u!114 &1130782137474622614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,3 +131,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253a66456b9894a3db12ace2dee494a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!61 &894933617619213883
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130782137474622611}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.018, y: 0.929}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.5}
+  m_EdgeRadius: 0

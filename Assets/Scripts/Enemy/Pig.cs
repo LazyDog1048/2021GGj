@@ -62,11 +62,12 @@ public class Pig : MonoBehaviour,IEnemy
     
     private IEnumerator Diging()
     {
+        float time = digTime;
         AudioManager.EnemyFXAudio("PigSmell");
-        while (digTime >= 0)
+        while (time >= 0)
         {
             yield return new WaitForSeconds(0.2f);
-            digTime -= 0.2f;
+            time -= 0.2f;
         }
 
         if (Pinecone != null && animState.CurState == EnemyState.Attack)
@@ -111,6 +112,8 @@ public class Pig : MonoBehaviour,IEnemy
     }
     public void Born(PineconeMgr pinecone)
     {
+        if(pinecone == null)
+            return;
         Pinecone = pinecone;
         transform.position = new Vector3(pinecone.transform.position.x +Random.Range(-10, 10f),0.15f,0);
         target = new Vector3(pinecone.transform.position.x - 0.4f,0.15f);

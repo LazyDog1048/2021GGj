@@ -2961,15 +2961,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pinecone
       objectReference: {fileID: 0}
+    - target: {fileID: 7632775623189104988, guid: af7ca6504db0043f7b3374c7d712acd2,
+        type: 3}
+      propertyPath: hangTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632775623189104988, guid: af7ca6504db0043f7b3374c7d712acd2,
+        type: 3}
+      propertyPath: ShakeTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7632775623189104990, guid: af7ca6504db0043f7b3374c7d712acd2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.06
+      value: -0.34
       objectReference: {fileID: 0}
     - target: {fileID: 7632775623189104990, guid: af7ca6504db0043f7b3374c7d712acd2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.36
+      value: 2.79
       objectReference: {fileID: 0}
     - target: {fileID: 7632775623189104990, guid: af7ca6504db0043f7b3374c7d712acd2,
         type: 3}
