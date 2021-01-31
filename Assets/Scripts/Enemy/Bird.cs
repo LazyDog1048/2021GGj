@@ -22,6 +22,13 @@ public class Bird : MonoBehaviour,IEnemy
     {
         animState = transform.GetComponent<BaseEnemyAnimStateMgr>();
         box = GetComponent<BoxCollider2D>();
+        
+        EventCenter.GetInstance().AddEventListener("StartFound",StartFound);
+    }
+
+    private void StartFound()
+    {
+        Destroy(gameObject);
     }
     
     void Fly()

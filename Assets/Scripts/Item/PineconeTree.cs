@@ -10,10 +10,20 @@ public class PineconeTree : MonoBehaviour
     private bool isgenerate;
     void Start()
     {
-        isgenerate = true;
-        StartCoroutine(Generate());
+        EventCenter.GetInstance().AddEventListener("StartLost",StartLost);
+        EventCenter.GetInstance().AddEventListener("StartFound",StartFound);
     }
 
+    private void StartLost()
+    {
+        isgenerate = true;
+        StartCoroutine(Generate());   
+    }
+
+    private void StartFound()
+    {
+        isgenerate = false;
+    }
     private IEnumerator Generate()
     {
         yield return new WaitForSeconds(generateTime);
@@ -21,11 +31,5 @@ public class PineconeTree : MonoBehaviour
         pinecone.transform.position = transform.position;
         if(isgenerate)
             StartCoroutine(Generate());
-    }
-
-
-    public void StopGenerate()
-    {
-        isgenerate = false;
     }
 }

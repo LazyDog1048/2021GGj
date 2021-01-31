@@ -12,6 +12,7 @@ public class PineconeMgr : MonoBehaviour,IPoolObj
     private Animator _anim;
     private PineconeState pineconeState;
 
+    private bool isStart;
     public PineconeState PineconeState
     {
         get { return pineconeState; }
@@ -21,7 +22,7 @@ public class PineconeMgr : MonoBehaviour,IPoolObj
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
     }
-
+    
     private void OnEnable()
     {
         pineconeState = PineconeState.Hang;

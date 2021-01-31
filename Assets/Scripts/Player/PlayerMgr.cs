@@ -69,7 +69,6 @@ namespace Player
             box = GetComponent<BoxCollider2D>();
             rb = GetComponent<Rigidbody2D>();
             playerAnimState = GetComponent<PlayerAnimStateMgr>();
-            InPutMgr.GetInstance().StartOrEnd(true);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyPress", GetKeyPress);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyDown", GetKeyDown);
             EventCenter.GetInstance().AddEventListener<KeyCode>("KeyUp", GetKeyUp);
@@ -104,6 +103,7 @@ namespace Player
 
         private void GameStart()
         {
+            InPutMgr.GetInstance().StartOrEnd(true);
             UiMgr.Instance.InitPowerBar(maxPower);
         }
 
@@ -254,12 +254,12 @@ namespace Player
         }
         
         
-//    private void OnDrawGizmos()
-//    {
-//        Vector2 checkTreeSize = new Vector2(box.bounds.size.x/2, box.bounds.size.y);            //0.3
-//        Vector2 checkTreePoint = (Vector2)transform.position + box.offset;
-//        Gizmos.DrawWireCube(checkTreePoint, checkTreeSize);
-//    }
+//        private void OnDrawGizmos()
+//        {
+//            Vector2 checkSize = new Vector2(box.bounds.size.x, 0.025f);            //0.3
+//            Vector2 checkPoint = new Vector2(transform.position.x, transform.position.y - (box.bounds.size.y + checkSize.y) / 2 - 0.125f );//-0.1f
+//            Gizmos.DrawWireCube(checkSize, checkPoint);
+//        }
            
         private void CheckGround()
         {

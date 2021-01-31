@@ -9,13 +9,25 @@ public class EnemyGenerate : MonoBehaviour
     public GameObject pig;
     public float BornCD;
 
+    private bool isBorn;
     private GameObject enemy;
     private PineconeMgr target;
     void Start()
     {
+        EventCenter.GetInstance().AddEventListener("StartLost",StartLost);
+        EventCenter.GetInstance().AddEventListener("StartFound",StartFound);
+    }
+
+    private void StartLost()
+    {
+        isBorn = true;
         StartCoroutine(BornEnemy());
     }
 
+    private void StartFound()
+    {
+        isBorn = false;
+    }
     void FingTarget()
     {
         if (PoolMgr.Instance.pineconList.Count > 0)
@@ -53,7 +65,7 @@ public class EnemyGenerate : MonoBehaviour
 
     private IEnumerator BornEnemy()
     {
-        while (true)
+        while (isBorn)
         {
             yield return new WaitForSeconds(BornCD);
             FingTarget();

@@ -21,6 +21,8 @@ public class UiMgr : MonoBehaviour
     
     private GameObject keepPinecone;
     private GameObject stateChangeAnim;
+    private Button startBtn;
+    private Button quitBtn;
     private Transform powerBar;
     private List<GameObject> powerList;
     private Text pineconeNum;
@@ -29,6 +31,8 @@ public class UiMgr : MonoBehaviour
 
     private Image wipeImage;
     private Text wipeText;
+    
+    
     
     private void Awake()
     {
@@ -46,15 +50,28 @@ public class UiMgr : MonoBehaviour
         pineconeNum = transform.Find("PineconeNum").Find("Num").GetComponent<Text>();
         gameStateText = transform.Find("GameState").GetComponent<Text>();
         timePinel = gameStateText.transform.Find("TimePanel").GetComponent<Text>();
-
+        
         wipeImage = stateChangeAnim.transform.Find("Wipe").GetComponent<Image>();
         wipeText = stateChangeAnim.transform.Find("Wipe").Find("Text").GetComponent<Text>();
         
         EventCenter.GetInstance().AddEventListener<bool>("KeepPineconeState", KeepPineconeState);
         EventCenter.GetInstance().AddEventListener<int>("PowerChange", SetPower);
         EventCenter.GetInstance().AddEventListener<int>("PineconeCollect", PineconeCollect);
-
-        GameStart();
+        
+        
+        startBtn = transform.Find("StartGame").Find("Start").GetComponent<Button>();
+        quitBtn = transform.Find("StartGame").Find("Quit").GetComponent<Button>();
+        
+        startBtn.onClick.AddListener(() =>
+        {
+            startBtn.transform.parent.gameObject.SetActive(false);
+            GameStart();
+        });
+        
+        quitBtn.onClick.AddListener(() =>
+        {
+            Application.Quit();
+        });
     }
     
     public void InitPowerBar(int maxPower)
@@ -211,9 +228,5 @@ public class UiMgr : MonoBehaviour
         }
             
     }
-
-    private void Update()
-    {
-        
-    }
+   
 }

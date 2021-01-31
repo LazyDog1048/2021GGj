@@ -15,8 +15,13 @@ public class Pig : MonoBehaviour,IEnemy
     void Start()
     {
         animState = GetComponent<BaseEnemyAnimStateMgr>();
+        EventCenter.GetInstance().AddEventListener("StartFound",StartFound);
     }
- 
+    
+    private void StartFound()
+    {
+        Destroy(gameObject);
+    }
    
     
     void Update()
